@@ -1,0 +1,5 @@
+.posts {
+  position: relative;
+  left: 50%;
+  height: calc(100vh - 50px)
+}

@@ -1,0 +1,49 @@
+
+body {
+  background-color: grey;
+}
+
+
+.sidebar-container {
+  display: flex;
+  flex-direction: column;
+  width: 20%;
+  height: 100%;
+}
+
+
+.top-left-sidebar-icon {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.side-nav {
+  /*display: none;*/
+  position: fixed;
+  top: 0;
+}
+
+#list-item {
+  border: none; 
+}
+
+#sidebar {
+  position: relative;
+  width: 100%;
+  border-bottom: 1px solid black;
+  border-bottom-right-radius: 0px;
+}
+
+.nav-icon {
+  width: 17px;
+  height: 4px;
+  background-color: black;
+  margin: 1px 0;
+}
+
+i {
+  margin-right: 15px;
+}
+

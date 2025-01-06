@@ -1,0 +1,23 @@
+
+footer {
+  position: relative;
+  left: 20%;
+  height: 50px;
+  background-color: #ADD8E6;
+  display: flex;
+  justify-content: left;
+  margin-top: 15px;
+}
+
+footer ul {
+  display: inline-block;
+  margin-right: 8px;
+  position: relative;
+  top: 10px;
+  /*text-align: center;*/
+}
+
+/*.footer ul li {
+  position: relative;
+  top: 5px;
+}*/
