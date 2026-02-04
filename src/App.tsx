@@ -17,6 +17,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Body />} />
             <Route path="/News" element={<News />} />
+            <Route path="/Timeline" element={<News />} />
           </Routes>
         </main>
       </BrowserRouter>

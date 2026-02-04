@@ -2,14 +2,14 @@ import React, { useEffect, useState } from 'react';
 import "./News.css";
 
 function News() {
-  const [newPostsData, setPostsData] = useState<{newPosts: Object[] | null,
+  const [postsData, setPostsData] = useState<{posts: Object[] | null,
     nextUrl: string | null}>({newPosts: null, nextUrl: null});
 
   const populatePosts = async () => {
   try {
     let response;
 
-    if (!newPostsData.newPosts)
+    if (!postsData.newPosts)
       response = await fetch('http://127.0.0.1:8000/playground/news/posts/0/');
 
     else
@@ -17,7 +17,7 @@ function News() {
 
     const allPosts = await response.json();
     console.log('Array:', ...allPosts.new_posts);
-    setPostsData({newPosts: allPosts.new_posts, nextUrl: allPosts.next});
+    setPostsData({newPosts: [newPostsData.newPosts, ...allPosts.new_posts], nextUrl: allPosts.next});
   } catch(error) {
       console.log(error);
     }

@@ -3,9 +3,16 @@ import react from '@vitejs/plugin-react'
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  root: '.',
   plugins: [react()],
-  server : {
+  server: {
     port: 8000,
-    host: '127.0.0.1'
-  }
+    host: true, // listen on 0.0.0.0 so VM host/guest can access
+    strictPort: false,
+  },
+  build: {
+    rollupOptions: {
+      input: './index.html',
+    },
+  },
 })
