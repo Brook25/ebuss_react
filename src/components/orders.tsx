@@ -7,7 +7,7 @@ function orders() {
         { orders: null, nextUrl: null }
     );
 
-    populatePosts = async () => {
+    populateOrders = async () => {
         let response;
         
         try {
@@ -29,10 +29,10 @@ function orders() {
 
 
     useEffect(() => {
-      populatePosts();
+      populateOrders();
     }, []);
 
-    
+
     return (
       <div className="orders">
         <table>
@@ -53,6 +53,7 @@ function orders() {
               <td>{order.status}</td>
             </tr>
           ))}
+          <tr><td colspan="5"><button>Load More</button></td></tr>
         </tbody>
         </table>
       </div>
