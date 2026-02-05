@@ -7,11 +7,11 @@ function orders() {
         { orders: null, nextUrl: null }
     );
 
-    populatePosts = () => {
+    populatePosts = async () => {
         let response;
         
         try {
-          if (!orders)
+          if (!orderData.orders)
             response = await fetch('http://127.0.0.1:8000/playground/orders/0/');
           else
             response = await fetch(orderData.nextUrl);
@@ -27,6 +27,12 @@ function orders() {
 
     let columns = ['Id', 'Product name', 'Supplier', 'Date', 'Status']
 
+
+    useEffect(() => {
+      populatePosts();
+    }, []);
+
+    
     return (
       <div className="orders">
         <table>
@@ -39,12 +45,12 @@ function orders() {
         <tbody>
           {orders.map((order) => (
             <tr key={order.id}>
-              <td><img> source={order.product.image}</img></td>
-              <td>order.id</td>
-              <td>order.prdouct_name</td>
-              <td>order.supplier_name</td>
-              <td>order.date</td>
-              <td>order.status</td>
+              <td><img> src={order.product.image}</img></td>
+              <td>{order.id}</td>
+              <td>{order.prdouct_name}</td>
+              <td>{order.supplier_name}</td>
+              <td>{order.date<}</td>
+              <td>{order.status}</td>
             </tr>
           ))}
         </tbody>
