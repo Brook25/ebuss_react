@@ -13,11 +13,11 @@ function News() {
       response = await fetch('http://127.0.0.1:8000/playground/news/posts/0/');
 
     else
-      response = await fetch(newPostsData.nextUrl);
+      response = await fetch(postsData.nextUrl);
 
     const allPosts = await response.json();
     console.log('Array:', ...allPosts.new_posts);
-    setPostsData({newPosts: [newPostsData.newPosts, ...allPosts.new_posts], nextUrl: allPosts.next});
+    setPostsData({newPosts: [postsData.newPosts, ...allPosts.new_posts], nextUrl: allPosts.next});
   } catch(error) {
       console.log(error);
     }

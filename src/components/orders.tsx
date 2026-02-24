@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 
 
-function orders() {
+function Orders() {
 
-    const [orderData, setOrderData] = useState<{orders: Array | null}>(
-        { orders: null, nextUrl: null }
+    const [orderData, setOrderData] = useState<{orders: Array, nextUrl: String | null}>(
+        { orders: [], nextUrl: null }
     );
 
-    populateOrders = async () => {
+    const populateOrders = async () => {
         let response;
         
         try {
@@ -61,4 +61,4 @@ function orders() {
   
   }
 
-export default orders;
+export default Orders;
