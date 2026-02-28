@@ -1,18 +1,36 @@
 import React,{ useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 
 
+interface PostType {
+  postId: number,
+  postText: string,
+  postImage: string
+}
 
-function PostsBody<{postId: number, postText: string, postImg: string}>({ postId, postText, postImg }) {
+
+function Post<{postId: number, postText: string, postImg: string}>({ postId, postText, postImg }) {
 
   const [commentData, setCommentData] = useState<{comments: Array, nextURL: String | null}>(
     { comments: [], nextURL: null }
   );
 
+  const [postData, setPostData] = <{postId: number | null, postText: string | null, postImage: string}>useState(
+    {postId: null, postText: null, postImage: null}
+  );
+
+  const location = useLocation();
+
+  const postState = location.state as PostType ? location.state : null; 
+
+  if (postState)
+    setPostData(postState);
+
   const populateComments = async () => {
     let response;
     
     if (commentData.comments.length === 0)
-      response = await fetch('http://127.0.0.1:8000/playground/posts/0/');
+      response = await fetch('http://127.0.0.1:8000/playground/post/0/');
     else
       response = await fetch(commentData.nextURL);
     
@@ -22,9 +40,10 @@ function PostsBody<{postId: number, postText: string, postImg: string}>({ postId
   }
 
 
-  useEffect(() => {
-    populateComments();
-  }, [])
+
+    useEffect(() => {
+      populateComments();
+    }, []);
 
 
   
@@ -33,11 +52,13 @@ function PostsBody<{postId: number, postText: string, postImg: string}>({ postId
              <p>{postText}</p>
               {postImg && <img src={postImg}/>}
               <div className="engagements">
-              <span className="comments"></span>
-              <span className="likes"></span>
-              <span className="share"></span>
+                <span className="comments"></span>
+                <span className="likes"></span>
+                <span className="share"></span>
             </div>
           </div>
 );
 
 }
+
+export default Post;
