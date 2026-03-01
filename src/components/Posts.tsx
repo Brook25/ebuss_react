@@ -40,8 +40,26 @@ function Post<{postId: number, postText: string, postImg: string}>({ postId, pos
   }
 
 
+  const populatePost = async () => {
+    
+    try {
+      let response;
+      if (postData.postId === null)
+        response = await fetch(`http://127.0.0.1:8000/playground/post/${postId}/`);
+        const dataPost = await response.json();
+        setPostData(dataPost.postData);
+      
+      const responseComments = await fetch(`http://127.0.0.1:8000/playground/post/${postId}/comments/0`);
+      const dataComments = await responseComments.json();
+      setCommentData({comments: [...commentData.comments, ...dataComments.commentData], nextURL: dataComments.next});
+    }
+    catch (error) {
+      console.log(error);
+    }
+  }
 
     useEffect(() => {
+
       populateComments();
     }, []);
 
@@ -55,6 +73,14 @@ function Post<{postId: number, postText: string, postImg: string}>({ postId, pos
                 <span className="comments"></span>
                 <span className="likes"></span>
                 <span className="share"></span>
+                {commentData.map((comment) => (
+                  <div className="comment" key={comment.id}>
+                    <p>{comment.text}</p>
+                    <span className="likes"></span>
+                    <span className="replies"></span>
+                    <span className="share"></span>
+                  </div>
+                ))}
             </div>
           </div>
 );
