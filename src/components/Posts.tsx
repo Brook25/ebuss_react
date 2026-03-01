@@ -45,7 +45,7 @@ function Post<{postId: number, postText: string, postImg: string}>({ postId, pos
     try {
       let response;
       if (postData.postId === null)
-        response = await fetch(`http://127.0.0.1:8000/playground/post/${postId}/`);
+        response = await fetch(`http://127.0.0.1:8000/playground/post/${postData.postId}/`);
         const dataPost = await response.json();
         setPostData(dataPost.postData);
       
@@ -73,14 +73,17 @@ function Post<{postId: number, postText: string, postImg: string}>({ postId, pos
                 <span className="comments"></span>
                 <span className="likes"></span>
                 <span className="share"></span>
-                {commentData.map((comment) => (
-                  <div className="comment" key={comment.id}>
-                    <p>{comment.text}</p>
-                    <span className="likes"></span>
-                    <span className="replies"></span>
-                    <span className="share"></span>
-                  </div>
-                ))}
+                <div className="comments">
+                  {commentData.map((comment) => (
+                    <div className="comment" key={comment.id}>
+                      <p>{comment.text}</p>
+                      <span className="likes"></span>
+                      <span className="replies"></span>
+                      <span className="share"></span>
+                    </div>
+                  ))}
+                  <button onClick={populateComments()}> See more comments </button>
+                </div>
             </div>
           </div>
 );
