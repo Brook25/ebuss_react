@@ -5,21 +5,25 @@ import { useLocation } from 'react-router-dom';
 interface PostType {
   postId: number,
   postText: string,
-  postImage: string
+  postImage: string,
+  replies?: PostType[] 
 }
+
 
 
 function Post<{postId: number, postText: string, postImg: string}>({ postId, postText, postImg }) {
 
-  const [commentData, setCommentData] = useState<{comments: Array, nextURL: String | null}>(
+  const [commentData, setCommentData] = useState<{comments: CommentType[], nextURL: String | null}>(
     { comments: [], nextURL: null }
   );
 
-  const [postData, setPostData] = <{postId: number | null, postText: string | null, postImage: string}>useState(
+  const [postData, setPostData] = useState<{postId: number | null, postText: string | null, postImage: string}>(
     {postId: null, postText: null, postImage: null}
   );
 
-  const [repliesData, setReplyData] = 
+  const [replyData, setReplyData] = useState<{commentId: number | null, replies: PostType[], 
+    nextURL: string
+  }>({commentO})
   
   const location = useLocation();
 
@@ -61,7 +65,7 @@ function Post<{postId: number, postText: string, postImg: string}>({ postId, pos
   }
 
 
-  cosnt populateReplies = async () => {
+  const populateReplies = async () => {
 
   }
 
