@@ -19,6 +19,8 @@ function Post<{postId: number, postText: string, postImg: string}>({ postId, pos
     {postId: null, postText: null, postImage: null}
   );
 
+  const [repliesData, setReplyData] = 
+  
   const location = useLocation();
 
   const postState = location.state as PostType ? location.state : null; 
@@ -43,10 +45,10 @@ function Post<{postId: number, postText: string, postImg: string}>({ postId, pos
   const populatePost = async () => {
     
     try {
-      let response;
+      let responsePost;
       if (postData.postId === null)
-        response = await fetch(`http://127.0.0.1:8000/playground/post/${postData.postId}/`);
-        const dataPost = await response.json();
+        responsePost = await fetch(`http://127.0.0.1:8000/playground/post/${postData.postId}/`);
+        const dataPost = await responsePost.json();
         setPostData(dataPost.postData);
       
       const responseComments = await fetch(`http://127.0.0.1:8000/playground/post/${postId}/comments/0`);
@@ -58,8 +60,13 @@ function Post<{postId: number, postText: string, postImg: string}>({ postId, pos
     }
   }
 
-    useEffect(() => {
 
+  cosnt populateReplies = async () => {
+
+  }
+
+
+    useEffect(() => {
       populateComments();
     }, []);
 
@@ -78,8 +85,9 @@ function Post<{postId: number, postText: string, postImg: string}>({ postId, pos
                     <div className="comment" key={comment.id}>
                       <p>{comment.text}</p>
                       <span className="likes"></span>
-                      <span className="replies"></span>
                       <span className="share"></span>
+                      {commment.replies >= 1 && <div> <span onClick=> Show Replies <i className="bi bi-triangle-fill"></i></span>
+                        </div>}
                     </div>
                   ))}
                   <button onClick={populateComments()}> See more comments </button>
