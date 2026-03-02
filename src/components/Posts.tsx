@@ -11,9 +11,9 @@ interface PostType {
 
 
 
-function Post<{postId: number, postText: string, postImg: string}>({ postId, postText, postImg }) {
+function Post(post: PostType) {
 
-  const [commentData, setCommentData] = useState<{comments: CommentType[], nextURL: String | null}>(
+  const [commentData, setCommentData] = useState<{comments: PostType[], nextURL: String | null}>(
     { comments: [], nextURL: null }
   );
 
