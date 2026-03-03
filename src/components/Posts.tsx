@@ -6,14 +6,23 @@ interface PostType {
   postId: number,
   postText: string,
   postImage: string,
-  replies?: PostType[] 
+  comments: number
+}
+
+
+interface CommentType {
+  postId: number | null,
+  postText: string,
+  postImage: string,
+  comments: number,
+  commentId: number | null
 }
 
 
 
 function Post(post: PostType) {
 
-  const [commentData, setCommentData] = useState<{comments: PostType[], nextURL: String | null}>(
+  const [commentData, setCommentData] = useState<{comments: CommentType[], nextURL: String | null}>(
     { comments: [], nextURL: null }
   );
 
@@ -21,9 +30,6 @@ function Post(post: PostType) {
     {postId: null, postText: null, postImage: null}
   );
 
-  const [replyData, setReplyData] = useState<{commentId: number | null, replies: PostType[], 
-    nextURL: string
-  }>({commentO})
   
   const location = useLocation();
 
@@ -54,25 +60,20 @@ function Post(post: PostType) {
         responsePost = await fetch(`http://127.0.0.1:8000/playground/post/${postData.postId}/`);
         const dataPost = await responsePost.json();
         setPostData(dataPost.postData);
-      
-      const responseComments = await fetch(`http://127.0.0.1:8000/playground/post/${postId}/comments/0`);
-      const dataComments = await responseComments.json();
-      setCommentData({comments: [...commentData.comments, ...dataComments.commentData], nextURL: dataComments.next});
     }
     catch (error) {
       console.log(error);
     }
   }
 
+  useEffect(() => {
+    if (postData.postId === null)
+      populatePost();
+  }, []);
 
-  const populateReplies = async () => {
-
-  }
-
-
-    useEffect(() => {
-      populateComments();
-    }, []);
+  useEffect(() => {
+    populateComments();
+  }, []);
 
 
   

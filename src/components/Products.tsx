@@ -28,8 +28,8 @@ function Products() {
     };
 
     return (
-        <div className=productData>
-
+        <div className="productData">
+          
         </div>
     );
     
