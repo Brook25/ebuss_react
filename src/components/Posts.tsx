@@ -3,19 +3,17 @@ import { useLocation } from 'react-router-dom';
 
 
 interface PostType {
-  postId: number,
-  postText: string,
-  postImage: string,
-  comments: number
+  id: number | null,
+  text: string,
+  image: string,
+  comments?: number
 }
 
 
-interface CommentType {
-  postId: number | null,
-  postText: string,
-  postImage: string,
-  comments: number,
-  commentId: number | null
+interface CommentType extends PostType {
+  postTo: number | null,
+  commentTo: number | null,
+  replies: number
 }
 
 
@@ -35,14 +33,26 @@ function Post(post: PostType) {
 
   const postState = location.state as PostType ? location.state : null; 
 
-  if (postState)
-    setPostData(postState);
+  try {
+    
+    if (postState)
+      setPostData(postState);
+    else {
+      const responsePost = await fetch(`http://127.0.0.1:8000/playground/post/${postData.postId}/`);
+      const dataPost = await responsePost.json();
+      setPostData(dataPost.postData);
+    }
+  }
+  catch (error) {
+    console.log(error);
+  }
 
-  const populateComments = async () => {
+  const populateComments = async (commentId: number) => {
     let response;
     
     if (commentData.comments.length === 0)
-      response = await fetch('http://127.0.0.1:8000/playground/post/0/');
+      /* Add URL to fetch comments */
+      response = await fetch('http://127.0.0.1:8000/playground/post/c/0/');
     else
       response = await fetch(commentData.nextURL);
     
@@ -51,30 +61,11 @@ function Post(post: PostType) {
     setCommentData({comments: [...commentData.comments, ...data.commentData], nextURL: commentData.nextURL});
   }
 
-
-  const populatePost = async () => {
-    
-    try {
-      let responsePost;
-      if (postData.postId === null)
-        responsePost = await fetch(`http://127.0.0.1:8000/playground/post/${postData.postId}/`);
-        const dataPost = await responsePost.json();
-        setPostData(dataPost.postData);
-    }
-    catch (error) {
-      console.log(error);
-    }
-  }
-
-  useEffect(() => {
-    if (postData.postId === null)
-      populatePost();
-  }, []);
+  
 
   useEffect(() => {
     populateComments();
   }, []);
-
 
   
   return (
@@ -91,7 +82,14 @@ function Post(post: PostType) {
                       <p>{comment.text}</p>
                       <span className="likes"></span>
                       <span className="share"></span>
-                      {commment.replies >= 1 && <div> <span onClick=> Show Replies <i className="bi bi-triangle-fill"></i></span>
+                      {commment.comments >= 1 && <div> <span onClick={populateComments(comment.commentId)}>
+                         Show Replies <i className="bi bi-triangle-fill"></i></span>
+                         {commentData.comments.filter((comment) => comment.commentTo === comment.id).map(() => (
+                           <div></div>
+                         )
+
+                         )
+                         })}
                         </div>}
                     </div>
                   ))}
