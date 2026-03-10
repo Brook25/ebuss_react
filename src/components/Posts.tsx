@@ -20,6 +20,8 @@ interface CommentType extends PostType {
 
 function Post(post: PostType) {
 
+  const [commentMetaData, setCommentMetaData] = useState<{metaData: Object | null}>({metaData: null});
+
   const [commentData, setCommentData] = useState<{comments: CommentType[], nextURL: String | null}>(
     { comments: [], nextURL: null }
   );
@@ -59,6 +61,14 @@ function Post(post: PostType) {
     const data = await response.json();
 
     setCommentData({comments: [...commentData.comments, ...data.commentData], nextURL: commentData.nextURL});
+    const newMetaData = {};
+    commentData.map((comment) => {
+      newMetaData[`{comment.id}`] = {
+        hasNext: comment.hasNext,
+        nextPage: comment.nextPage
+      }
+    })
+    setCommentMetaData({...metaData, ...newMetaData});
   }
 
   
