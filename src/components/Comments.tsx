@@ -9,7 +9,7 @@ const Comment = (id) => {
          <Comment id={childComment.id}/>)
   }
    
-  <div className="comments" key=id>
+  <div className="comments" key={id}>
       <p>{comment.text}</p>
       <span>likes</span>
       <span>share</span>
