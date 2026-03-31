@@ -6,14 +6,16 @@ interface PostType {
   id: number | null,
   text: string,
   image: string,
-  comments?: number
+  comments?: number,
+  hasNext: boolean
 }
 
 
 interface CommentType extends PostType {
   postTo: number | null,
   commentTo: number | null,
-  replies: number
+  replies: number,
+  showReplies: boolean
 }
 
 
@@ -22,9 +24,7 @@ function Post(post: PostType) {
 
   const [commentMetaData, setCommentMetaData] = useState<{metaData: Object | null}>({metaData: null});
 
-  const [commentData, setCommentData] = useState<{comments: CommentType[], nextURL: String | null}>(
-    { comments: [], nextURL: null }
-  );
+  const [commentData, setCommentData] = useState<{comments: Object}>({});
 
   const [postData, setPostData] = useState<{postId: number | null, postText: string | null, postImage: string}>(
     {postId: null, postText: null, postImage: null}
@@ -62,12 +62,12 @@ function Post(post: PostType) {
 
     setCommentData({comments: [...commentData.comments, ...data.commentData], nextURL: commentData.nextURL});
     const newMetaData = {};
-    commentData.map((comment) => {
+    commentData.map((comment) => (
       newMetaData[`{comment.id}`] = {
         hasNext: comment.hasNext,
         nextPage: comment.nextPage
-      }
-    })
+    )
+    )
     setCommentMetaData({...metaData, ...newMetaData});
   }
 
@@ -88,15 +88,12 @@ function Post(post: PostType) {
                 <span className="share"></span>
                 <div className="comments">
                   {commentData.map((comment) => (
-                    <div className="comment" key={comment.id}>
-                      <p>{comment.text}</p>
-                      <span className="likes"></span>
-                      <span className="share"></span>
-                      {commment.comments >= 1 && <div> <span onClick={populateComments(comment.commentId)}>
-                         Show Replies <i className="bi bi-triangle-fill"></i></span>
-                         {commentData.comments.filter((comment) => comment.commentTo === comment.id).map(() => (
-                           <div></div>
-                         )
+                      <Comment
+                        key={comment.id}
+                        comment={comment}
+                        allComments={commentData.comments}
+                        />
+                        )
 
                          )
                          })}
