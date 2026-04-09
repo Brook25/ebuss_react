@@ -7,7 +7,23 @@ const Comment = (comment: commentType) =>  {
        comment.id === parentComment.commentTo).map((childComment: CommentType) =>
          <Comment id={childComment.id}/>)
   }
-   
+  
+   const editComment = async (commentId: number) => {
+    try {
+      const response = await fetch(`http://127.0.0.1:8000/playground/comment/${commentId}/update/`, {
+        method: 'PUT',
+        body: JSON.stringify({text: comment.text}),
+      });
+    }
+    catch (error) {
+      console.log(error);
+    }
+   }
+
+   const deleteComment = async (commentId: number) => {
+     const reponse = await fetch()
+   }
+
    return ( 
    <div className="comment-header"> 
      <img src={comment.user.profile_image}/>
