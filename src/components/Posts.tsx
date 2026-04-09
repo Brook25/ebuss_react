@@ -61,16 +61,6 @@ function Post(post: PostType) {
     const data = await response.json();
 
     setCommentData({comments: [...commentData.comments, ...data.commentData], nextURL: commentData.nextURL});
-    const newMetaData = {};
-    commentData.map((comment) => (
-      newMetaData[`{comment.id}`] = {
-        hasNext: comment.hasNext,
-        nextPage: comment.nextPage
-    )
-    )
-    setCommentMetaData({...metaData, ...newMetaData});
-  }
-
   
 
   useEffect(() => {
@@ -93,18 +83,13 @@ function Post(post: PostType) {
                         comment={comment}
                         allComments={commentData.comments}
                         />
-                        )
-
-                         )
-                         })}
-                        </div>}
+                        ))
+                         }
+                        </div>
                     </div>
-                  ))}
                   <button onClick={populateComments()}> See more comments </button>
                 </div>
-            </div>
-          </div>
-);
+  );
 
 }
 
