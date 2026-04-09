@@ -13,6 +13,7 @@ const Comment = (comment: commentType) =>  {
      <img src={comment.user.profile_image}/>
      <p>{comment.user.username}</p>
      <p>{comment.created_at}</p>
+     <i className="bi bi-three-dots-vertical" onClick={() => { setShowOptions(!showOptions) }}></i>
    </div>
    <div className="comment-content" key={comment.id}>
     <p>{comment.text}</p>
