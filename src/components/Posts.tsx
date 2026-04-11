@@ -30,6 +30,8 @@ function Post(post: PostType) {
     {postId: null, postText: null, postImage: null}
   );
 
+  const [openWindowBox, setOpenWindowBox] = useState<open: boolean>(false);
+
   
   const location = useLocation();
 
@@ -68,14 +70,16 @@ function Post(post: PostType) {
   }, []);
 
   
+  
   return (
            <div className="post" key={postId}>
              <p>{postText}</p>
               {postImg && <img src={postImg}/>}
               <div className="engagements">
-                <span className="comments"></span>
+                <span className="comments" onClick={() => {setOpenCommentBox(true)}}></span>
                 <span className="likes"></span>
                 <span className="share"></span>
+                <textarea></textarea>
                 <div className="comments">
                   {commentData.map((comment) => (
                       <Comment
