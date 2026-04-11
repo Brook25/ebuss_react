@@ -8,20 +8,31 @@ const Comment = (comment: commentType) =>  {
          <Comment id={childComment.id}/>)
   }
   
-   const editComment = async (commentId: number) => {
-    try {
-      const response = await fetch(`http://127.0.0.1:8000/playground/comment/${commentId}/update/`, {
-        method: 'PUT',
-        body: JSON.stringify({text: comment.text}),
-      });
-    }
-    catch (error) {
-      console.log(error);
-    }
-   }
 
-   const deleteComment = async (commentId: number) => {
-     const reponse = await fetch()
+   const commentItem = async (commentId: number) => {
+
+      const [error, setError] = useState<error: string | null>(null);
+
+      useEffect(() => {
+        const timer = setTimeout(() => {
+          setError(null);
+        }, 4000);
+        return () => clearTimeout(timer);
+      }, [error]);
+
+     const handleAction = async (actionType: 'DELETE' | 'PATCH') => {
+
+      try {
+      const reponse = await fetch(`https://127.0.0.1/playground/comment/${commentId}/`,
+         {method: actionType.toUpperCase()});
+       if (response.status != 200)
+         setError('Couldn\'t complete action.')
+      }
+      catch (error) {
+        setError('Network Error.')
+        console.log(error);
+      }
+      
    }
 
    return ( 
@@ -48,6 +59,7 @@ const Comment = (comment: commentType) =>  {
     <span>{comment.likes}</span>
     <span>share</span>
       {comment.replies >= 1 && <div onClick={() => { populateComments(comment.id) }}>
+      {error && <span>{error}</span>} 
       Show Replies <i className="bi bi-triangle-fill"></i>
       {commentData[id][showReplies] && loadComments(comment)}
       </div>
@@ -55,19 +67,4 @@ const Comment = (comment: commentType) =>  {
         </div>
   )
 }
-
-
-
-
-
-
-
-
-function Comments(commentId: number) {
-  return {
-    commentData.comments.map((comment) => (
-      
-    ) 
-    )
-  }
 }
