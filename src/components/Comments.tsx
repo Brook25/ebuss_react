@@ -20,19 +20,41 @@ const Comment = (comment: commentType) =>  {
         return () => clearTimeout(timer);
       }, [error]);
 
-     const handleAction = async (actionType: 'DELETE' | 'PATCH') => {
+     const handledelete = async () => {
+      
+      const {commentId: {}, newcommentData} = commentData;
+      setCommentData(newCommentData);
 
       try {
       const reponse = await fetch(`https://127.0.0.1/playground/comment/${commentId}/`,
-         {method: actionType.toUpperCase()});
-       if (response.status != 200)
-         setError('Couldn\'t complete action.')
+         {method: 'DELETE'});
+        
+       if (response.status !== 200) {
+         setError('Action not completed on server.')
+       }
+
       }
       catch (error) {
         setError('Network Error.')
         console.log(error);
       }
-      
+    }
+
+      const handleEdit = async (newComment) => {
+        setCommentData({...commentData, commentId: { ...commentData.commentId, 'text': newComment} });
+        
+        try {
+          const response = await fetch(`https://127.0.0.1/playground/comment/${commentId}/`, {
+            method: 'PATCH'
+          });
+
+          if (response.status !== 200)
+            setError('Action not completed.');
+        }
+        catch (error) {
+          setError('Network Error.');
+          console.log(error);
+        }   
    }
 
    return ( 
@@ -46,18 +68,13 @@ const Comment = (comment: commentType) =>  {
      <i className="bi bi-trash" onClick={() => { deleteComment(comment.id) }}></i>
       </div>
       </div>
-      <i className="bi bi-reply" onClick={() => { replyToComment(comment.id) }}></i>
-      <div className="comment-replies">
-      {comment.replies.map((reply: ReplyType) => (
-        <Comment id={reply.id}/>
-      ))}
-      </div>
       </div>}
    </div>
    <div className="comment-content" key={comment.id}>
     <p>{comment.text}</p>
     <span>{comment.likes}</span>
     <span>share</span>
+    <i className="bi bi-reply" onClick={() => { replyToComment(comment.id) }}></i>
       {comment.replies >= 1 && <div onClick={() => { populateComments(comment.id) }}>
       {error && <span>{error}</span>} 
       Show Replies <i className="bi bi-triangle-fill"></i>
