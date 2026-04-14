@@ -64,7 +64,7 @@ const Comment = (comment: commentType) =>  {
      <p>{comment.created_at}</p>
      <i className="bi bi-three-dots-vertical" onClick={() => { setShowOptions(!showOptions) }}></i>
      {showOptions && <div> 
-     <i className="bi bi-pencil-square" onClick={() => { editComment(comment.id) }}></i>
+     {<i className="bi bi-pencil-square" onClick={() => { editComment(comment.id) }}></i>
      <i className="bi bi-trash" onClick={() => { deleteComment(comment.id) }}></i>
       </div>
       </div>
