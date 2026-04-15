@@ -1,7 +1,10 @@
 import React, {useEffect, useState} from 'react';
-
+import userAuth from AuthContext;
 
 const Comment = (comment: commentType) =>  {
+  
+  const { user } = useAuth();
+  
   const loadComments = async (comment: CommentType) => {
     commentData.comments.filter((parentComment) =>
        comment.id === parentComment.commentTo).map((childComment: CommentType) =>

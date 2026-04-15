@@ -12,8 +12,9 @@ function App() {
 
   return (
     <>
-      <TopNavBar/>
       <BrowserRouter>
+      <TopNavBar/>
+      <SideBar/>
         <main>
           <Routes>
             <Route path="/" element={<Body />} />
@@ -22,8 +23,8 @@ function App() {
             <Route path="/post" element={<Post/>} />
           </Routes>
         </main>
-      </BrowserRouter>
       <Footer/>
+      </BrowserRouter>
     </>
   )
 }
