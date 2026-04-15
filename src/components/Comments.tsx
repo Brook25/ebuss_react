@@ -5,6 +5,8 @@ const Comment = (comment: commentType) =>  {
   
   const { user } = useAuth();
   
+  const [editCommentMap, setEditCommentMap] = useState<Record<number, boolean>>({});
+
   const loadComments = async (comment: CommentType) => {
     commentData.comments.filter((parentComment) =>
        comment.id === parentComment.commentTo).map((childComment: CommentType) =>
@@ -60,6 +62,20 @@ const Comment = (comment: commentType) =>  {
         }   
    }
 
+   const editComment = async (commentId: string) {
+      let newEditComment = { [commentId]: true, ...editCommentMap };
+      setEditCommentMap(prev => (
+        {...prev, [commentId]: }
+      ));
+      handleEdit();
+   };
+
+   const deleteComment = async (commentId: string) {
+     
+   }
+
+
+
    return ( 
    <div className="comment-header"> 
      <img src={comment.user.profile_image}/>
@@ -67,14 +83,14 @@ const Comment = (comment: commentType) =>  {
      <p>{comment.created_at}</p>
      <i className="bi bi-three-dots-vertical" onClick={() => { setShowOptions(!showOptions) }}></i>
      {showOptions && <div> 
-     {<i className="bi bi-pencil-square" onClick={() => { editComment(comment.id) }}></i>
-     <i className="bi bi-trash" onClick={() => { deleteComment(comment.id) }}></i>
+     {user.id === comment.userId && <i className="bi bi-pencil-square" onClick={() => { editComment(commentId)} }></i>}
+     {user.id === comment.userId && <i className="bi bi-trash" onClick={() => { deleteComment(comment.id) }}></i>}
       </div>
       </div>
       </div>}
    </div>
    <div className="comment-content" key={comment.id}>
-    <p>{comment.text}</p>
+    {commentEditMap.comment.id === false ? <p>{comment.text}</p> : <textarea>{comment.text}</textarea>}
     <span>{comment.likes}</span>
     <span>share</span>
     <i className="bi bi-reply" onClick={() => { replyToComment(comment.id) }}></i>

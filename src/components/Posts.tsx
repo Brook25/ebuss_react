@@ -1,6 +1,6 @@
 import React,{ useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-
+import {us}
 
 interface PostType {
   id: number | null,
@@ -21,6 +21,8 @@ interface CommentType extends PostType {
 
 
 function Post(post: PostType) {
+
+  const user = 
 
   const [commentMetaData, setCommentMetaData] = useState<{metaData: Object | null}>({metaData: null});
 
