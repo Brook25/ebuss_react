@@ -27,7 +27,7 @@ const Comment = (comment: commentType) =>  {
 
      const handledelete = async () => {
       
-      const {commentId: {}, newcommentData} = commentData;
+      const {commentId: {}, ...newcommentData} = commentData;
       setCommentData(newCommentData);
 
       try {
