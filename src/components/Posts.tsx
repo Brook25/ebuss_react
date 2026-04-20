@@ -1,6 +1,5 @@
 import React,{ useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import {us}
 
 interface PostType {
   id: number | null,
@@ -71,14 +70,14 @@ function Post(post: PostType) {
     populateComments();
   }, []);
 
-  
+  /* Add text area on line 83 to add comment based on the value of OpenCommentBox */
   
   return (
            <div className="post" key={postId}>
              <p>{postText}</p>
               {postImg && <img src={postImg}/>}
               <div className="engagements">
-                <span className="comments" onClick={() => {setOpenCommentBox(true)}}></span>
+                <span className="comments" onClick={() => {setOpenCommentBox(true)}}></span>              
                 <span className="likes"></span>
                 <span className="share"></span>
                 {openCommentBox && <textarea></textarea>}
@@ -96,7 +95,7 @@ function Post(post: PostType) {
                   <button onClick={populateComments()}> See more comments </button>
                 </div>
   );
-
+  }
 }
 
 export default Post;

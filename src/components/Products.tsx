@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from 'react';
 
+const uriType = Interface {
+    'resource': string,
+    'identifier': string | null,
+}
+
+
 /* check typing of array of objects or empty array */
 
 function Products() {
@@ -8,40 +14,55 @@ function Products() {
         { products: [], nextUrl: null }
     );
     
-    const populateProducts = async () => {
+    const {resource, identifier: null} = useParams();
+
+    
+    useEffect(() => {
         
-        try {
-            let response;
-            
-            if (productData.length === 0) 
-                response = await fetch('http://127.0.0.1:8000/playground/products/0/');
-            else
-                response = await fetch(productData.nextUrl);
-
+        (async () => {
+            try {          
+            let cancelled = false;
+            const response = await fetch('http://127.0.0.1:8000/playground/products/0/');
             const data = await response.json();
-
-            setProducts([...productData.products, data.productData]);
+            if (cancelled) return;
+            setProducts({
+              products: Array.isArray(data.productData) ?? [],
+              nextUrl: data.nextUrl ?? null
+            });
         }
         catch (error) {
-            console.log(error);
+          console.log(error);
         }
-    };
+        return () => {
+          cancelled = true;
+        }
+        });
+    }, []);
+
+
+    const fetchProducts = async () => {
+      const newProducts = await fetch(productData.nextUrl);
+      const data = await newProducts.json();
+      setProducts((prev) => ({
+        products: [...prev.products, ...data.products],
+        nextUrl: data.nextUrl ?? null
+      }));
+    }
 
     return (
         <div className="productData">
-          
+          {productData.products.map((product) => (
+            <div className="product" key={product.id}>
+              <h2>{product.name}</h2>
+              <p>{product.description}</p>
+              <img src={product.imageUrl} alt={product.name}/>
+            </div>
+          ))}
+          {productData.nextUrl && (
+            <button onClick={fetchProducts}>Load More</button>
+          )}
         </div>
     );
     
 }
 
-
-
-
-
-
-return (
-    <div >
-      
-    </div>
-)

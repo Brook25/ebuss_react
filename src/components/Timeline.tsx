@@ -19,7 +19,8 @@ function timeLine() {
            state={{ postId: id, postImage: image, postText: text}}
          >
           <div className="post" key={post.id}>
-            <p>{post.content}</p>
+            <p>{post.text}</p>
+            <img source={post.img}/>
             <div className="engagements">
               <span className="comments"></span>
               <span className="likes"></span>
