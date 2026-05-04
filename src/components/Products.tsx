@@ -53,9 +53,10 @@ function Products() {
         <div className="productData">
           {productData.products.map((product) => (
             <div className="product" key={product.id}>
+              <img src={product.imageUrl} alt={product.name}/>
               <h2>{product.name}</h2>
               <p>{product.description}</p>
-              <img src={product.imageUrl} alt={product.name}/>
+              <button>Add To cart</button>
             </div>
           ))}
           {productData.nextUrl && (
