@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import ProductEndPoints from '../api/ProductEndPoints';
 import ProductDisplay from './ProductsDisplay';
 
 interface UriType {
@@ -28,7 +30,8 @@ function ProductsDisplay() {
     (async () => {
       try {
         let cancelled = false;
-        const response = await fetch('http://127.0.0.1:8000/playground/products/0/');
+        
+        const response = await fetch(ProductEndPoints.getProducts);
         const data = await response.json();
         if (cancelled) return;
         setProducts({
