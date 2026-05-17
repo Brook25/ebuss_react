@@ -1,10 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import ProductDisplay from './ProductsDisplay';
-
-interface UriType {
-  resource: string;
-  identifier: string | null;
-}
+import ProductsDisplay from './ProductsDisplay';
 
 interface Product {
   id: number;
@@ -13,7 +8,7 @@ interface Product {
   description: string;
 }
 
-function ProductsDisplay() {
+function UserProducts() {
   const [productData, setProducts] = useState<{
     products: Product[];
     nextUrl: string | null;
@@ -22,13 +17,12 @@ function ProductsDisplay() {
     nextUrl: null,
   });
 
-  const { resource, identifier } = useParams<UriType>();
-
   useEffect(() => {
     (async () => {
       try {
         let cancelled = false;
-        const response = await fetch('http://127.0.0.1:8000/playground/products/0/');
+        // Example: fetch user-specific products
+        const response = await fetch('http://127.0.0.1:8000/playground/user-products/');
         const data = await response.json();
         if (cancelled) return;
         setProducts({
@@ -58,24 +52,13 @@ function ProductsDisplay() {
     }
   };
 
-  
   return (
-    <div className="productData">
-      {products.map((product) => (
-        <div className="product" key={product.id}>
-          <img src={product.imageUrl} alt={product.name} />
-          <h2>{product.name}</h2>
-          <p>{product.description}</p>
-          <button>Add To cart</button>
-        </div>
-      ))}
-      {nextUrl && (
-        <button onClick={onLoadMore}>Load More</button>
-      )}
-    </div>
+    <ProductsDisplay
+      products={productData.products}
+      nextUrl={productData.nextUrl}
+      onLoadMore={fetchProducts}
+    />
   );
 }
 
-export default ProductsDisplay;
-
-
+export default UserProducts;
