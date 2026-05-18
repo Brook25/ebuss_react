@@ -1,8 +1,6 @@
 type epFunction = ((arg?: string) => string);
 
 
-
-
 const ProductEndPoints: Record<string, epFunction> = {
     'all': (queryParams?: string) => `/products/all${queryParams ? `?${queryParams}` : ''}`,
     'category': (categoryId?: string, queryParams?: string) => `/products/category/${categoryId}${queryParams ? `?${queryParams}` : ''}`,
@@ -11,7 +9,6 @@ const ProductEndPoints: Record<string, epFunction> = {
     'store': (queryParams?: string) => `/products/store/${queryParams ? `?${queryParams}` : ''}`,
     'popular': (pathSegment?: string, queryParams?: string) => `/products/popular/${pathSegment}/${queryParams ? `?${queryParams}` : ''}` 
 };
-
 
 const resolveEndpoint = (resource: string, identifier: string | null = null) => {
     const epResolver = ProductEndPoints[resource as keyof typeof ProductEndPoints];

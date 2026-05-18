@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import ProductEndPoints from '../api/ProductEndPoints';
 import ProductDisplay from './ProductsDisplay';
 
@@ -25,12 +26,13 @@ function ProductsDisplay() {
   });
 
   const { resource, identifier } = useParams<UriType>();
+  const [searchParams] = useSearchParams<UriType>();
 
   useEffect(() => {
     (async () => {
       try {
-        let cancelled = false;
-        
+        var cancelled = false;
+        const q = searchParams.get('q');
         const response = await fetch(ProductEndPoints.getProducts);
         const data = await response.json();
         if (cancelled) return;
