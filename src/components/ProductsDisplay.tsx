@@ -15,7 +15,7 @@ interface ProductsDisplayProps {
 }
 
 
-function ProductDisplay(productData: Product) => {
+function ProductDisplay(productData: Product): JSX.Element {
 
   const [showSuccessBox, setShowSuccessBox] = useState<boolean>(false);
   const [successStatus, setSuccessStatus] = useState<boolean>(false);

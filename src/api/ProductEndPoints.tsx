@@ -1,8 +1,8 @@
-interface urlParams {
+interface urlParamsType {
     identifier?: string;
     queryParams: string | null;
 } 
-type epFunction = ((urlParams: urlParams) => string);
+type epFunction = ((urlParams: urlParamsType) => string);
 
 
 const ProductEndPoints: Record<string, epFunction> = {
@@ -14,21 +14,15 @@ const ProductEndPoints: Record<string, epFunction> = {
     'popular': ({ identifier, queryParams }) => `/products/popular/${identifier}/${queryParams ? `?${queryParams}` : ''}` 
 };
 
-const resolveEndpoint = (resource: string, identifier: string | null = null, queryParams: string | null) => {
+const resolveEndpoint = (resource: string, identifier: string | null = null, queryParams: string | null): string | null => {
     const epResolver = ProductEndPoints[resource as keyof typeof ProductEndPoints];
-    const urlParams = { queryParams, ...( identifier !== null ? { identifier } : {}) };
+    const urlParams: urlParamsType = { queryParams, ...( identifier !== null ? { identifier } : {} ) };
     if (! (typeof epResolver === 'function')) {
-      console.error(`Endpoint for resource '${resource}' is not a function.`);
+      console.log(`Endpoint for resource '${resource}' is not a function.`);
       return null;
     }
-    try {
-    if (identifier !== null) return epResolver({ identifier, queryParams });
-    }
-    catch (error) {
-        console.error(`Error resolving endpoint for resource ${resource} with error: ${error}`);
-        return null;
-    }
+    return epResolver(urlParams);
 
 }
 
-export default ProductEndPoints;
+export { ProductEndPoints, resolveEndpoint };
