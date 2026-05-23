@@ -11,8 +11,11 @@
   "dependencies": {
     "bootstrap": "^5.2.3",
     "bootstrap-icons": "^1.11.1",
+    "chart.js": "^4.5.1",
     "react": "^18.2.0",
     "react-bootstrap": "^2.9.1",
+    "react-chart.js": "^1.0.0",
+    "react-chartjs-2": "^5.3.1",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.16.0"
   },
