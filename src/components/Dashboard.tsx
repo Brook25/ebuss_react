@@ -13,6 +13,24 @@ interface DashboardDataType {
 }
 
 
+interface ChartDataType {
+  labels: string[],
+  datasets: Array<{
+    label: string,
+    data: number[],
+    backgroundColor?: string,
+    borderColor?: string,
+    borderWidth?: number
+  }>
+}
+
+interface ChartMetaDataType {
+  label: string,
+  xAxisLabel: string,
+  yAxisLabel: string
+}
+
+
 
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, PointElement, LineElement, Title, Tooltip, Legend);
@@ -22,8 +40,17 @@ function Dashboard(): JSX.Element {
   const [dashboardData, setDashboardData] = useState<DashboardDataType>({});
 
 
-  function transformToCharData(data: Record<string, Record<string, number>>): any {
-
+  function transformToCharData({label, xAxisLabel, yAxisLabel}: ChartMetaDataType, data: Record<string, Array<{ name: string, value: number }>>): any {
+    const labels = Object.keys(data);
+    const values = Object.values(data);
+    const entities = values.map(value => value.map(item => item.name)).flat();
+    const datasets = [
+      {
+        label: label,
+        data: labels.map(label => )
+      }
+    ]
+  }
 
   useEffect(() => {
     (async () => {
@@ -50,10 +77,6 @@ function Dashboard(): JSX.Element {
   return () => { cancelled = true; };
   }, [])
   
-
-  
-
-
 
 
   return (<div>
