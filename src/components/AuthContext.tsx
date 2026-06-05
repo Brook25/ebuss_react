@@ -3,12 +3,12 @@ import { createContext, useContext, useState} from "react";
 const AuthContext = createContext();
 
 /* Add an interface for the user object type */
-const userType = {
+interface userType {
   firstName: string,
   lastName: string,
   username: string,
   id: number,
-  email, string
+  email: string
 }
 
 
@@ -68,7 +68,7 @@ export function AuthProvider({children}) {
     };
 
     return (
-      <AuthContext.Provider value={{usr, login, logout, loading}}>
+      <AuthContext.Provider value={{user, login, logout, loading}}>
         {!loading ? children : <div>Page Loading...</div>}
       </AuthContext>
     )  

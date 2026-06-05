@@ -21,6 +21,11 @@ function Cart () {
     return (
         <div className="cart-container">
             <h2>Your Cart</h2>
+            <div className="cart-items">
+              {cartItems.length > 0 ? (
+                cartItems.map((item, index) => )
+              )}
+            </div>
         </div>
     )
 }
