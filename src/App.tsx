@@ -8,7 +8,7 @@ import News from './components/News';
 import Post from './components/Posts';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import './App.css';
-import { NotificationProvider } from './components/NotificationContext';
+import { NotificationProvider, notificationType } from './components/NotificationContext';
 
 function App() {
 

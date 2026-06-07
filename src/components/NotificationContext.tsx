@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 
-interface notificationType {
+export interface notificationType {
   note: string,
   url: string,
   date: Date
@@ -9,7 +9,7 @@ interface notificationType {
 const NotificationContext = createContext();
 
 export function NotificationProvider( { children }: { children: React.ReactNode } ) {
-    const [notifications, setNotifications] = useState<Array<notificationType>>([]);
+    const [notifications, setNotifications] = useState<{ notifications: Array<notificationType>, newCount: number }>({notifications: [], newCount: 0});
     useEffect(() => {
       
       const getNotifications = async function () {

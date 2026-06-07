@@ -1,8 +1,9 @@
 import { React, useState } from "react";
 import { useEffect } from "react";
 import "./TopNavBar.css"; 
-import SideBar from "./SideBar.tsx";
-import { useNotifcations } from "./NotificationContext";
+import SideBar from "./SideBar";
+import { useNotifcations, notificationType } from "./NotificationContext";
+import { Link } from "react-router-dom";
 
 
 function TopNavBar() {
@@ -27,10 +28,10 @@ function TopNavBar() {
                         {name: "Profile", icon:"bi bi-person-circle"}]
     }
 
-  const notifications = useNotifcations();
+  const { notifications, newCount } = useNotifcations();
 
   const listNotifications = async function () {
-    
+
   }
 
   return (
@@ -43,7 +44,12 @@ function TopNavBar() {
     <ul className="top-nav-right">
       <li>Recommendations</li> 
       <li>Store</li> 
-      <li onClick={listNotifications}>Notifications</li> 
+      <li onClick={listNotifications}>Notifications</li>
+      { showNotifications && notifications.map((notification: notificationType, index: number) => (
+        <Link to={notification.url} key={index}>
+          <span>{notification.note}</span>
+        </Link>
+      ))}
     </ul>
   </nav>
   );
