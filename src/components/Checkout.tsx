@@ -1,9 +1,9 @@
 import { React } from "react";
-import userAuth from "./AuthContext";
+import { useAuth } from "./AuthContext";
 
 
 function Checkout (cartId: number, paymentTotal: number) {
-  const user = userAuth();
+  const user = useAuth();
   const [withdrawalOptions, setWithdrawalOptions] = useState<Array<string>>([]);
   const [selectedOption, setSelectedOption] = useState<Object>({});
   const [showOption, setShowOption] = useState<boolean>(false);

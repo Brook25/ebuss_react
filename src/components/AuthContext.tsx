@@ -1,4 +1,4 @@
-import { createContext, useContext, useState} from "react";
+import { createContext, useContext, useState, useEffect} from "react";
 
 const AuthContext = createContext();
 
@@ -12,14 +12,14 @@ interface userType {
 }
 
 
-export function AuthProvider({children}) {
+export function AuthProvider({children}: {children: React.ReactNode}) {
     
     const [user, setUser] = useState<userType | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {
         const getUserStatus = async () {
-            cost token = localStorage.getItem('access_token');
+            const token = localStorage.getItem('access_token');
             if (!token) {
               setLoading(false);
               return;
@@ -70,8 +70,8 @@ export function AuthProvider({children}) {
     return (
       <AuthContext.Provider value={{user, login, logout, loading}}>
         {!loading ? children : <div>Page Loading...</div>}
-      </AuthContext>
+      </AuthContext.Provider>
     )  
 }
 
-export default useAuth = () => useContext(AuthContext);
+export const useAuth = () => useContext(AuthContext);
