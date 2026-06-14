@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect} from "react";
+import { useNavigate } from "react-router-dom";
 
 const AuthContext = createContext();
 
@@ -24,7 +25,7 @@ export function AuthProvider({children}: {children: React.ReactNode}) {
               setLoading(false);
               return;
             }
-
+            const navigate = useNavigate();
             try {
               const response = await fetch('http://127.0.0.1/playground/auth/me', 
                 { headers: {
@@ -37,22 +38,22 @@ export function AuthProvider({children}: {children: React.ReactNode}) {
                 const userData = await response.json();
                 setUser(userData);
               }
-              else{
+              else if (response.status === 401) {
                 logout();
+                navigate('/login', { state: { error: "User not Authorized. Please log in."} })
               }
             }
-
             catch (error) {
                 console.error("User detail could not be retreived.", error);
             }
-            finally() {
+            finally {
               setLoading(false);
             }
         }
     getUserStatus();        
     }, []);
 
-    const login = async (credentials) => {
+    const login = async (credentials: { email: string, password: string}) => {
       const response = await fetch('http://127.0.0.1/playground/token', {
         method: 'POST',
         body: JSON.stringify(credentials)

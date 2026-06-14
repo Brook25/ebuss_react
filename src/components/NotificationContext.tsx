@@ -20,7 +20,7 @@ export function NotificationProvider( { children }: { children: React.ReactNode 
           return;
         } 
         const newNotifications = await data.json() as Array<notificationType>;
-        setNotifications((prev) => [...newNotifications, ...prev]);
+        setNotifications((prev) => ({...newNotifications, ...prev}));
       } 
       catch (error) {
         console.error("An error occurred while fetching notifications.", error);
