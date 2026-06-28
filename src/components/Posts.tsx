@@ -1,5 +1,6 @@
 import React,{ useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
+import { useAuth } from './AuthContext';
 
 interface PostType {
   id: number | null,
@@ -21,11 +22,11 @@ interface CommentType extends PostType {
 
 function Post(post: PostType) {
 
-  const user = 
+  const user = useAuth();
 
   const [commentMetaData, setCommentMetaData] = useState<{metaData: Object | null}>({metaData: null});
 
-  const [commentData, setCommentData] = useState<{comments: Object}>({});
+  const [commentData, setCommentData] = useState<CommentType[]>([]);
 
   const [postData, setPostData] = useState<{postId: number | null, postText: string | null, postImage: string}>(
     {postId: null, postText: null, postImage: null}

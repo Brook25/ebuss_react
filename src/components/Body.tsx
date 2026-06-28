@@ -55,7 +55,7 @@ function Body() {
   return (
     <>
     <div className="item-bar">
-      <button onClick={onPrevious}><i class="bi bi-chevron-left"></i></button>
+      <button onClick={onPrevious}><i className="bi bi-chevron-left"></i></button>
         <div className="imageContainer">
         <img 
            className="image firstImage"
@@ -70,7 +70,7 @@ function Body() {
           }
         />
        </div>
-      <button onClick={onNext}><i class="bi bi-chevron-right"></i></button>
+      <button onClick={onNext}><i className="bi bi-chevron-right"></i></button>
     </div>
 
     <div className="body">
