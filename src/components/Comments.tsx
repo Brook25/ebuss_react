@@ -1,22 +1,27 @@
-import React, {useEffect, useState} from 'react';
-import userAuth from AuthContext;
+import React, { useEffect, useState } from 'react';
+import { userAuth, userType, AuthContextType } from './AuthContext';
 
-const Comment = (comment: commentType) =>  {
+const Comment = (key: number, comment: commentType, allComments: CommentType[], onUpdate: (comment: CommentType) => void) =>  {
   
-  const { user } = useAuth();
-  
-  const [editCommentMap, setEditCommentMap] = useState<Record<number, boolean>>({});
+  const authData: AuthContextType | undefined = userAuth();
+
+  const user: userType | null = authData?.user ?? null;
+
+  const [showOptions, setShowOptions] = useState<boolean>(false);
+
+  const [commentEditMap, setCommentEditMap] = useState<Record<number, boolean>>({});
+
 
   const loadComments = async (comment: CommentType) => {
     commentData.comments.filter((parentComment) =>
        comment.id === parentComment.commentTo).map((childComment: CommentType) =>
-         <Comment id={childComment.id}/>)
+         <Comment key={childComment.id}/>)
   }
   
 
    const commentItem = async (commentId: number) => {
 
-      const [error, setError] = useState<error: string | null>(null);
+      const [error, setError] = useState<string | null>(null);
 
       useEffect(() => {
         const timer = setTimeout(() => {
@@ -27,7 +32,7 @@ const Comment = (comment: commentType) =>  {
 
      const handledelete = async () => {
       
-      const {commentId: {}, ...newcommentData} = commentData;
+      const [_commentId, ...newcommentData] = allComments;
       setCommentData(newCommentData);
 
       try {
@@ -45,8 +50,8 @@ const Comment = (comment: commentType) =>  {
       }
     }
 
-      const handleEdit = async (newComment) => {
-        setCommentData({...commentData, commentId: { ...commentData.commentId, 'text': newComment} });
+      const handleEdit = async (commentId: string, newComment: string) => {
+        setCommentData((prev: Object) => ({...prev, commentId: { ...commentData.commentId, 'text': newComment} }));
         
         try {
           const response = await fetch(`https://127.0.0.1/playground/comment/${commentId}/`, {
@@ -62,12 +67,11 @@ const Comment = (comment: commentType) =>  {
         }   
    }
 
-   const editComment = async (commentId: string) {
-      let newEditComment = { [commentId]: true, ...editCommentMap };
-      setEditCommentMap(prev => (
-        {...prev, [commentId]: }
+   const editComment = async (commentId: string, newComment: string) => {
+      setCommentEditMap(prev => (
+        {...prev, [commentId]: true}
       ));
-      handleEdit();
+      handleEdit(commentId, newComment);
    };
 
    const deleteComment = async (commentId: string) {
@@ -83,19 +87,19 @@ const Comment = (comment: commentType) =>  {
      <p>{comment.created_at}</p>
      <i className="bi bi-three-dots-vertical" onClick={() => { setShowOptions(!showOptions) }}></i>
      {showOptions && <div> 
-     {user.id === comment.userId && <i className="bi bi-pencil-square" onClick={() => { editComment(commentId)} }></i>}
-     {user.id === comment.userId && <i className="bi bi-trash" onClick={() => { deleteComment(comment.id) }}></i>}
-      </div>
+     {user?.id === comment.userId && <i className="bi bi-pencil-square" onClick={() => { editComment(commentId)} }></i>}
+     {user?.id === comment.userId && <i className="bi bi-trash" onClick={() => { deleteComment(comment.id) }}></i>}
+      </div>}
       </div>
       </div>}
    </div>
    <div className="comment-content" key={comment.id}>
-    {commentEditMap.comment.id === false ? <p>{comment.text}</p> : <textarea>{comment.text}</textarea>}
+    {commentEditMap[comment.id] === false ? <p>{comment.text}</p> : <textarea>{comment.text}</textarea>}
     <span>{comment.likes}</span>
     <span>share</span>
     <i className="bi bi-reply" onClick={() => { replyToComment(comment.id) }}></i>
       {comment.replies >= 1 && <div onClick={() => { populateComments(comment.id) }}>
-      {error && <span>{error}</span>} 
+      {error !== null && <span>{error}</span>} 
       Show Replies <i className="bi bi-triangle-fill"></i>
       {commentData[id][showReplies] && loadComments(comment)}
       </div>

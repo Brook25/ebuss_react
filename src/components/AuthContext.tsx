@@ -1,10 +1,10 @@
 import { createContext, useContext, useState, useEffect} from "react";
 import { useNavigate } from "react-router-dom";
 
-const AuthContext = createContext();
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 /* Add an interface for the user object type */
-interface userType {
+export interface userType {
   firstName: string,
   lastName: string,
   username: string,
@@ -12,6 +12,12 @@ interface userType {
   email: string
 }
 
+export interface AuthContextType {
+  user: userType | null;
+  login: (credentials: { email: string, password: string }) => Promise<void>;
+  logout: () => Promise<void>;
+  loading: boolean;
+}
 
 export function AuthProvider({children}: {children: React.ReactNode}) {
     
@@ -19,7 +25,7 @@ export function AuthProvider({children}: {children: React.ReactNode}) {
     const [loading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {
-        const getUserStatus = async () {
+        const getUserStatus = async () => {
             const token = localStorage.getItem('access_token');
             if (!token) {
               setLoading(false);
@@ -75,4 +81,4 @@ export function AuthProvider({children}: {children: React.ReactNode}) {
     )  
 }
 
-export const useAuth = () => useContext(AuthContext);
+export const userAuth = () => useContext(AuthContext);
