@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { userAuth, userType, AuthContextType } from './AuthContext';
-
-const Comment = (key: number, comment: commentType, allComments: CommentType[], onUpdate: (comment: CommentType) => void) =>  {
+import { CommentType } from './Posts';
+const Comment = (key: number, comment:CommentType, allComments: CommentType[], onUpdate: (comment: {commentId: number, newComment: string}) => void, onDelete: (commentId: number) => void) =>  {
   
   const authData: AuthContextType | undefined = userAuth();
 
@@ -30,13 +30,12 @@ const Comment = (key: number, comment: commentType, allComments: CommentType[], 
         return () => clearTimeout(timer);
       }, [error]);
 
-     const handledelete = async () => {
+     const handledelete = async (commentId: number) => {
       
-      const [_commentId, ...newcommentData] = allComments;
-      setCommentData(newCommentData);
+      onDelete(commentId);
 
       try {
-      const reponse = await fetch(`https://127.0.0.1/playground/comment/${commentId}/`,
+      const response = await fetch(`https://127.0.0.1/playground/comment/${commentId}/`,
          {method: 'DELETE'});
         
        if (response.status !== 200) {
@@ -50,8 +49,8 @@ const Comment = (key: number, comment: commentType, allComments: CommentType[], 
       }
     }
 
-      const handleEdit = async (commentId: string, newComment: string) => {
-        setCommentData((prev: Object) => ({...prev, commentId: { ...commentData.commentId, 'text': newComment} }));
+      const handleEdit = async (commentId: number, newComment: string) => {
+        onUpdate({commentId, newComment});
         
         try {
           const response = await fetch(`https://127.0.0.1/playground/comment/${commentId}/`, {
@@ -65,17 +64,6 @@ const Comment = (key: number, comment: commentType, allComments: CommentType[], 
           setError('Network Error.');
           console.log(error);
         }   
-   }
-
-   const editComment = async (commentId: string, newComment: string) => {
-      setCommentEditMap(prev => (
-        {...prev, [commentId]: true}
-      ));
-      handleEdit(commentId, newComment);
-   };
-
-   const deleteComment = async (commentId: string) {
-     
    }
 
 

@@ -1,6 +1,6 @@
 import React,{ useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { useAuth } from './AuthContext';
+import { userAuth } from './AuthContext';
 
 interface PostType {
   id: number | null,
@@ -11,7 +11,7 @@ interface PostType {
 }
 
 
-interface CommentType extends PostType {
+export interface CommentType extends PostType {
   postTo: number | null,
   commentTo: number | null,
   replies: number,
@@ -39,6 +39,19 @@ function Post(post: PostType) {
 
   const postState = location.state as PostType ? location.state : null; 
 
+  const populateComments = async () => {
+    let response;
+    
+    if (commentData.comments.length === 0)
+      /* Add URL to fetch comments */
+      response = await fetch('http://127.0.0.1:8000/playground/post/c/0/');
+    else
+      response = await fetch(commentData.nextURL);
+    
+    const data = await response.json();
+
+    setCommentData({comments: [...commentData.comments, ...data.commentData], nextURL: commentData.nextURL});
+  }
   
   
 
@@ -57,20 +70,6 @@ function Post(post: PostType) {
   }
   catch (error) {
     console.log(error);
-  }
-
-  const populateComments = async (commentId: number) => {
-    let response;
-    
-    if (commentData.comments.length === 0)
-      /* Add URL to fetch comments */
-      response = await fetch('http://127.0.0.1:8000/playground/post/c/0/');
-    else
-      response = await fetch(commentData.nextURL);
-    
-    const data = await response.json();
-
-    setCommentData({comments: [...commentData.comments, ...data.commentData], nextURL: commentData.nextURL});
   }
     })();
   }, []);
@@ -92,7 +91,8 @@ function Post(post: PostType) {
                         key={comment.id}
                         comment={comment}
                         allComments={commentData.comments}
-                        onUpdate={(comment: CommntType) => setCommentData((prev: CommentType[]) => [...prev, comment])}
+                        onUpdate={(comment: CommentType) => setCommentData((prev: CommentType[]) =>  prev.map(c => c.id === comment.id ? {...c, text: comment.text} : c) )}
+                        onDelete={(commentId: number) => setCommentData((prev: CommentType[]) => prev.filter(comment => comment.id !== commentId))}
                         />
                         ))
                          }
@@ -102,6 +102,5 @@ function Post(post: PostType) {
                 </div>
   );
   }
-}
 
 export default Post;

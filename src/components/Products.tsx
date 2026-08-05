@@ -25,18 +25,18 @@ function ProductsDisplay() {
     nextUrl: null,
   });
 
-  const { resource, identifier } = useParams<UriType>();
-  const [searchParams] = useSearchParams<UriType>();
+  const { resource, identifier } = useParams();
+  const [searchParams] = useSearchParams();
 
   useEffect(() => {
+    let cancelled = false;
     (async () => {
-      let cancelled = false;
       try {
-        const q = searchParams.get('q');
-        if (cancelled) return;
+        const q = searchParams.get('q');   
         const endpoint = resolveEndpoint(resource, identifier, q);
         if (endpoint != null) {
           const requestInfo: URL = new URL(endpoint);
+          if (cancelled) return;
           const response = await fetch(requestInfo);    
           const data = await response.json();
           setProducts({
@@ -51,7 +51,7 @@ function ProductsDisplay() {
       }
       })();
     return () => { cancelled = true; };
-  }, []);
+  }, [resource, identifier, searchParams]);
 
   const fetchProducts = async () => {
     if (!productData.nextUrl) return;
