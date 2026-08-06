@@ -1,5 +1,6 @@
 import { React, useState, useEffect } from "react";
 import { userAuth } from "./AuthContext";
+import 
 
 
 function Checkout (cartId: number, paymentTotal: number) {
@@ -29,6 +30,8 @@ function Checkout (cartId: number, paymentTotal: number) {
     }, []);
 
     // handle idempotency
+    const uuid = 
+    const idempotencyKey = `${cartId}-${selectedOption}-${paymentTotal}`;
     const handleCheckout = () => {
       const response = await fetch(`http://localhost:8000/playground/checkout/${selectedOption}/`, {
         method: 'POST',
