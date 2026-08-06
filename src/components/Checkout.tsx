@@ -1,57 +1,67 @@
-import { React, useState } from "react";
-import { useAuth } from "./AuthContext";
+import { React, useState, useEffect } from "react";
+import { userAuth } from "./AuthContext";
 
 
 function Checkout (cartId: number, paymentTotal: number) {
-  const user = useAuth();
-  const [withdrawalOptions, setWithdrawalOptions] = useState<Array<string>>([]);
+  const user = userAuth();
+
   const [selectedOption, setSelectedOption] = useState<Object>({});
-  const [showOption, setShowOption] = useState<boolean>(false);
+  const [paymentOptions, setPaymentOptions] = useState<[]>([]);
+  const [checkoutStatus, setCheckoutStatus] = useState<boolean>(false);
+
     useEffect(() => {
+      let isMounted = true;
       (async () => {
         try {
-            const response = await fetch(`http://localhost:8000/playground/withdrawal-options/`);
+            const response = await fetch(`http://localhost:8000/playground/payment-options/`);
+            if (!isMounted) return;
             const data = await response.json();
-            setWithdrawalOptions(data);
+            setPaymentOptions(data);
         } catch (error) {
             console.error("Error fetching withdrawal options:", error);
         }
       });
 
       return () => {
+        isMounted = false;
         // Cleanup if necessary
       }
     }, []);
 
-    const handleWithdrawalOptionSelect = (option: string) => {
-      setSelectedOption(option);
-      setShowOption(true);
+    // handle idempotency
+    const handleCheckout = () => {
+      const response = await fetch(`http://localhost:8000/playground/checkout/${selectedOption}/`, {
+        method: 'POST',
+        body: JSON.stringify({
+          'cartId': cartId,
+          'paymentTotal': paymentTotal,
+        })
+      });
+
+      if (response.ok) {
+        setCheckoutStatus(true);
+      }
+
+
     }
 
     return (
       <div className="checkout-container">
         <h2>Checkout</h2>
         <p>Cart ID: {cartId}</p>
-        {showOption ?
-          (<div className="selected-option-details">
+        {checkoutStatus ? (
+          <p>Checkout successful!</p>
+        ) : (
+          <div className="selected-option-details">
             <h3>{option.name} Details</h3>
             <img src=`/images/${option}.png` alt={`${option} logo`} className="selected-option-logo" />
             <p>Payment Total: ${paymentTotal.toFixed(2)}</p>
-            <button className="confirm-payment-button">Confirm Payment</button>
+            <button className="confirm-payment-button" onClick={handleCheckout}>
+              Confirm Payment
+            </button>
           </div>)
-        : 
-        (<div className="withdrawal-options">
-          <h3>Choose A Withdrawal Option</h3>
-          <ul className="withdrawal-options-list">
-            {withdrawalOptions.map((option, index) => (
-              <li key={index} onClick={() => handleWithdrawalOptionSelect(option)}>
-                <img src=`/images/${option}.png` alt={`${option} logo`} className="withdrawal-option-logo" />
-                <span className="withdrawal-option-name">{option.name}</span>
-                </li>
-              
-            ))}
-          </ul>
-        </div>)}
+        
+        }
       </div>
     )
 }
