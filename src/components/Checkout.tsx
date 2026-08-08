@@ -1,6 +1,6 @@
-import { React, useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { userAuth } from "./AuthContext";
-import 
+
 
 
 function Checkout (cartId: number, paymentTotal: number) {
@@ -8,7 +8,7 @@ function Checkout (cartId: number, paymentTotal: number) {
 
   const [selectedOption, setSelectedOption] = useState<Object>({});
   const [paymentOptions, setPaymentOptions] = useState<[]>([]);
-  const [checkoutStatus, setCheckoutStatus] = useState<boolean>(false);
+  const [checkoutStatus, setCheckoutStatus] = useState<boolean | null>(null);
 
     useEffect(() => {
       let isMounted = true;
@@ -30,21 +30,19 @@ function Checkout (cartId: number, paymentTotal: number) {
     }, []);
 
     // handle idempotency
-    const uuid = 
-    const idempotencyKey = `${cartId}-${selectedOption}-${paymentTotal}`;
+    const uuid = useRef<null | string>(null);
+    
     const handleCheckout = () => {
+      uuid.current = crypto.randomUUID();
       const response = await fetch(`http://localhost:8000/playground/checkout/${selectedOption}/`, {
         method: 'POST',
         body: JSON.stringify({
           'cartId': cartId,
           'paymentTotal': paymentTotal,
+          'idempotencyKey': uuid.current,
         })
       });
-
-      if (response.ok) {
-        setCheckoutStatus(true);
-      }
-
+      response.ok ? setCheckoutStatus(true) : setCheckoutStatus(false);
 
     }
 
