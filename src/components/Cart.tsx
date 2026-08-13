@@ -23,7 +23,7 @@ function Cart () {
             <h2>Your Cart</h2>
             <div className="cart-items">
               {cartItems.length > 0 ? (
-                cartItems.map((item, index) => )
+                cartItems.map((product, index) => <div>)
               )}
             </div>
         </div>

@@ -8,7 +8,14 @@ export interface notificationType {
   status: 'success' | 'failed' | 'pending'
 }
 
-const NotificationContext = createContext();
+export interface notificationContextType {
+  notifications: {notifications: notificationType[], newCount: number},
+  clearIdempotencyKey: () => void,
+  resetIdempotencyKey: () => void,
+  getIdempotencyKey: () => null | string
+}
+
+const NotificationContext = createContext<undefined | notificationContextType>(undefined);
 
 export function NotificationProvider( { children }: { children: React.ReactNode } ) {
     const [notifications, setNotifications] = useState<{ notifications: Array<notificationType>, newCount: number }>({notifications: [], newCount: 0});
@@ -25,7 +32,7 @@ export function NotificationProvider( { children }: { children: React.ReactNode 
         } 
         const newNotifications = await data.json() as Array<notificationType>;
         const allPaymentSuccess = newNotifications.filter((notification) => (notification.type === 'payment')).every((notification) => notification.status === 'success');
-        (allPaymentSuccess && idemptencyKey) && (idemptencyKey.current = null);
+        (allPaymentSuccess && idempotencyKey) && (idempotencyKey.current = null);
         setNotifications((prev) => ({...newNotifications, ...prev}));
       } 
       catch (error) {
@@ -47,10 +54,10 @@ export function NotificationProvider( { children }: { children: React.ReactNode 
       return idempotencyKey.current;
     } 
     return (
-      <NotificationContext.Provider value={{notifications, setNotifications, resetIdempotencyKey, clearIdempotencyKey, getIdempotencyKey}}>
+      <NotificationContext.Provider value={{notifications, resetIdempotencyKey, clearIdempotencyKey, getIdempotencyKey}}>
         {children}
       </NotificationContext.Provider>
     )
 }
 
-export const useNotifcations = () => useContext(NotificationContext);
+export const useNotifications = () => useContext(NotificationContext);

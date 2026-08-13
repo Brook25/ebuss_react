@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
 import { userAuth } from "./AuthContext";
+import { useNotifications } from "./NotificationContext";
 
 
 
-function Checkout (cartId: number, paymentTotal: number) {
+export default function Checkout (cartId: number, paymentTotal: number) {
   const user = userAuth();
 
   const [selectedOption, setSelectedOption] = useState<Object>({});
@@ -25,21 +26,19 @@ function Checkout (cartId: number, paymentTotal: number) {
 
       return () => {
         isMounted = false;
-        // Cleanup if necessary
       }
     }, []);
 
     // handle idempotency
-    const uuid = useRef<null | string>(null);
+    const idempotencyKey = useNotifications()?.getIdempotencyKey();
     
     const handleCheckout = () => {
-      uuid.current = crypto.randomUUID();
       const response = await fetch(`http://localhost:8000/playground/checkout/${selectedOption}/`, {
         method: 'POST',
         body: JSON.stringify({
           'cartId': cartId,
           'paymentTotal': paymentTotal,
-          'idempotencyKey': uuid.current,
+          'idempotencyKey': idempotencyKey,
         })
       });
       response.ok ? setCheckoutStatus(true) : setCheckoutStatus(false);

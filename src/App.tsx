@@ -6,6 +6,7 @@ import Footer from './components/Footer';
 import Body from './components/Body';
 import News from './components/News';
 import Post from './components/Posts';
+import Checkout from './components/Checkout';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import './App.css';
 import { NotificationProvider, notificationType } from './components/NotificationContext';
@@ -24,7 +25,8 @@ function App() {
             <Route path="/" element={<Body />} />
             <Route path="/news" element={<News />} />
             <Route path="/timeline" element={<News />} />
-            <Route path="/post" element={<Post/>} />
+            <Route path="/post" element={<Post />} />
+            <Route path="/checkout" element={<Checkout />} />
           </Routes>
         </main>
       <Footer/>

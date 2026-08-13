@@ -11,7 +11,8 @@ const ProductEndPoints: Record<string, epFunction> = {
     'search': ({ queryParams }) => `/products/search?q=${queryParams}`,
     'subCategory': ({ identifier, queryParams }) => `/products/subcategory/${identifier}${queryParams ? `?${queryParams}` : ''}`,
     'store': ({ queryParams }) => `/products/store/${queryParams ? `?${queryParams}` : ''}`,
-    'popular': ({ identifier, queryParams }) => `/products/popular/${identifier}/${queryParams ? `?${queryParams}` : ''}` 
+    'popular': ({ identifier, queryParams }) => `/products/popular/${identifier}/${queryParams ? `?${queryParams}` : ''}`,
+    'cart': ({ identifier, queryParams }) => `/products/cart/${identifier}/${queryParams ? `?${queryParams}` : ''}`
 };
 
 const resolveEndpoint = (resource: string, identifier: string | null = null, queryParams: string | null): string | null => {

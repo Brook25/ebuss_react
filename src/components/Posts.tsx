@@ -22,7 +22,7 @@ export interface CommentType extends PostType {
 
 function Post(post: PostType) {
 
-  const user = useAuth();
+  const user = userAuth()?.user;
 
   const [commentMetaData, setCommentMetaData] = useState<{metaData: Object | null}>({metaData: null});
 

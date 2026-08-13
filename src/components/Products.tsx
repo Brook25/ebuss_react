@@ -53,7 +53,7 @@ function ProductsDisplay() {
     return () => { cancelled = true; };
   }, [resource, identifier, searchParams]);
 
-  const fetchProducts = async () => {
+  const onLoadMore = async () => {
     if (!productData.nextUrl) return;
     try {
       const newProducts = await fetch(productData.nextUrl);
