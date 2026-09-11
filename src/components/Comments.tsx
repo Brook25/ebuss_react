@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { userAuth, userType, AuthContextType } from './AuthContext';
-import { CommentType } from './Posts';
+import { CommentType } from './Post';
 const Comment = (key: number, comment:CommentType, allComments: CommentType[], onUpdate: (comment: {commentId: number, newComment: string}) => void, onDelete: (commentId: number) => void) =>  {
   
   const authData: AuthContextType | undefined = userAuth();

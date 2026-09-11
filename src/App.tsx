@@ -5,7 +5,7 @@ import TopNavBar from './components/TopNavBar';
 import Footer from './components/Footer';
 import Body from './components/Body';
 import News from './components/News';
-import Post from './components/Posts';
+import Post from './components/Post';
 import Checkout from './components/Checkout';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import './App.css';

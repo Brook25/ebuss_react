@@ -9,7 +9,7 @@ interface UriType {
   identifier: string | null;
 }
 
-interface Product {
+export interface ProductType {
   id: number;
   imageUrl: string;
   name: string;
@@ -18,7 +18,7 @@ interface Product {
 
 function ProductsDisplay() {
   const [productData, setProducts] = useState<{
-    products: Product[];
+    products: ProductType[];
     nextUrl: string | null;
   }>({
     products: [],
@@ -70,7 +70,7 @@ function ProductsDisplay() {
   
   return (
     <div className="productData">
-      {products.map((product) => (
+      {productData.products.map((product) => (
         <div className="product" key={product.id}>
           <img src={product.imageUrl} alt={product.name} />
           <h2>{product.name}</h2>
@@ -78,7 +78,7 @@ function ProductsDisplay() {
           <button>Add To cart</button>
         </div>
       ))}
-      {nextUrl && (
+      {productData.nextUrl && (
         <button onClick={onLoadMore}>Load More</button>
       )}
     </div>

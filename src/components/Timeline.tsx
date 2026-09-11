@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import populatePosts from "./utils.tsx";
 
-function timeLine() {
+function TimeLine() {
     
     const [myPosts, setMyPosts] = useState<{myPosts: Object[] | null,
          nextUrl: string | null}>({myPosts: null, nextUrl: null});

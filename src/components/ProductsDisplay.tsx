@@ -1,21 +1,15 @@
 import React from 'react';
 import { useState } from 'react';
-
-interface Product {
-  id: number;
-  imageUrl: string;
-  name: string;
-  description: string;
-}
+import { ProductType } from './Products';
 
 interface ProductsDisplayProps {
-  products: Product[];
+  products: ProductType[];
   nextUrl: string | null;
   onLoadMore: () => void;
 }
 
 
-function ProductDisplay(productData: Product): JSX.Element {
+export default function ProductDisplay({ productData }: { productData: ProductType }): JSX.Element {
 
   const [showSuccessBox, setShowSuccessBox] = useState<boolean>(false);
   const [successStatus, setSuccessStatus] = useState<boolean>(false);

@@ -1,24 +1,33 @@
 import React, { useEffect, useState } from 'react';
 
+interface OrderType {
+    id: number,
+    product_name: string,
+    product_image: string,
+    supplier_name: string,
+    date: string,
+    status: string
+}
 
 function Orders() {
 
-    const [orderData, setOrderData] = useState<{orders: Array, nextUrl: String | null}>(
-        { orders: [], nextUrl: null }
+    const [orderData, setOrderData] = useState<{orders: OrderType[], nextUrl: URL | RequestInfo | string }>(
+        { orders: [], nextUrl: 'http://127.0.0.1:8000/playground/orders/0/' }
     );
 
     const populateOrders = async () => {
         let response;
         
         try {
-          if (!orderData.orders)
-            response = await fetch('http://127.0.0.1:8000/playground/orders/0/');
-          else
             response = await fetch(orderData.nextUrl);
-        
-          const orders = await response.json();
+            const orders = await response.json() as {data: OrderType[], nextUrl: URL | RequestInfo | string};
 
-          setOrderData({orders: [orderData.orders, ...orders.data], nextUrl: orderData.nextUrl});
+            setOrderData((prevState) => (
+            {
+              orders: [...prevState.orders, ...orders.data],
+              nextUrl: orders.nextUrl
+            }
+          ));
         }        
         catch(error) {
             console.log(error);
@@ -43,11 +52,11 @@ function Orders() {
         )}</tr>
         </thead>
         <tbody>
-          {orders.map((order) => (
+          {orderData.orders.map((order) => (
             <tr key={order.id}>
-              <td><img> src={order.product.image}</img></td>
+              <td><img src={order.product_image} alt={order.product_name} /></td>
               <td>{order.id}</td>
-              <td>{order.prdouct_name}</td>
+              <td>{order.product_name}</td>
               <td>{order.supplier_name}</td>
               <td>{order.date<}</td>
               <td>{order.status}</td>
