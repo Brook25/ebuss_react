@@ -43,11 +43,8 @@ export default function ProductDisplay({ productData }: { productData: ProductTy
       <button onClick={handleAddToCart}>Add to Cart</button>
       {showSuccessBox && (
         <div className="success-box">
-          {successStatus ? (<p>Product added to cart successfully!</p>
-                            <span className="checkmark"></span>)
-           : (<p>Failed to add product to cart.</p>
-              <span className="crossmark"></span>)
-           }
+        <p>{successStatus ? 'Product added to cart successfully!' : 'Failed to add product to cart.'}</p>
+        <span className={successStatus ? "checkmark" : "crossmark"}></span>
         </div>
       )}
     </div>

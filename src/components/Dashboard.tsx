@@ -42,7 +42,7 @@ function Dashboard(): JSX.Element {
 
 
   function transformToCharData({label, xAxisLabel, yAxisLabel, type}: ChartMetaDataType, data: Record<string, Array<{ name: string, value: number }>>): any {
-    const labels = Object.keys(data).sort();
+    const labels = Object.keys(data);
     const values = Object.values(data);
     const entities = values[0].map(item => item.name);
     const backgroundColors = {0: 'rgba(255, 99, 132, 0.5)', 1: 'rgba(54, 162, 235, 0.5)', 2: 'rgba(255, 206, 86, 0.5)', 3: 'rgba(75, 192, 192, 0.5)', 4: 'rgba(153, 102, 255, 0.5)'} as Record<number, string>;
@@ -72,8 +72,8 @@ function Dashboard(): JSX.Element {
   }
 
   useEffect(() => {
+    let cancelled = false;
     (async () => {
-      var cancelled = false;
       const uri = window.location.href;
       try {
       const response = await fetch(uri, {

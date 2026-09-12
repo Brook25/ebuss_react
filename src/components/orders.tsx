@@ -58,11 +58,11 @@ function Orders() {
               <td>{order.id}</td>
               <td>{order.product_name}</td>
               <td>{order.supplier_name}</td>
-              <td>{order.date<}</td>
+              <td>{order.date}</td>
               <td>{order.status}</td>
             </tr>
           ))}
-          <tr><td colspan="5"><button>Load More</button></td></tr>
+          <tr><td colSpan={5}><button>Load More</button></td></tr>
         </tbody>
         </table>
       </div>
