@@ -6,7 +6,12 @@ function Withdrawal (paymentTotal: number) {
 
   const user = userAuth();
   const [withdrawalOptions, setWithdrawalOptions] = useState<Array<string>>([]);
+  const [selectedOption, setSelectedOption] = useState<string | null>(null);
 
+
+  
+  
+  
   useEffect(() => {
     (async () => {
         try {
@@ -24,7 +29,7 @@ function Withdrawal (paymentTotal: number) {
           <h3>Choose A Withdrawal Option</h3>
           <ul className="withdrawal-options-list">
             {withdrawalOptions.map((option, index) => (
-              <li key={index} onClick={() => handleWithdrawalOptionSelect(option)}>
+              <li key={index} onClick={() => setSelectedOption(option)}>
                 <img src=`/images/${option}.png` alt={`${option} logo`} className="withdrawal-option-logo" />
                 <span className="withdrawal-option-name">{option.name}</span>
                 </li>
