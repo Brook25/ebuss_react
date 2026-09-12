@@ -8,10 +8,14 @@ function Withdrawal (paymentTotal: number) {
   const [withdrawalOptions, setWithdrawalOptions] = useState<Array<string>>([]);
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
 
+  const onWithdraw = () => {
+    if (!selectedOption) {
+      alert("Please select a withdrawal option.");
+      return;
+    }
+    
+  };
 
-  
-  
-  
   useEffect(() => {
     (async () => {
         try {
@@ -30,11 +34,18 @@ function Withdrawal (paymentTotal: number) {
           <ul className="withdrawal-options-list">
             {withdrawalOptions.map((option, index) => (
               <li key={index} onClick={() => setSelectedOption(option)}>
-                <img src=`/images/${option}.png` alt={`${option} logo`} className="withdrawal-option-logo" />
+                <img src={`/images/${option}.png`} alt={`${option} logo`} className="withdrawal-option-logo" />
                 <span className="withdrawal-option-name">{option.name}</span>
-                </li>
-              
+                </li>          
             ))}
           </ul>
+          <form onSubmit={(e: React.FormEvent<HTMLFormElement>) => {e.preventDefault(), onWithdraw()}}>
+            <button type="submit" disabled={!selectedOption}>Withdraw</button>
+          </form>
+        </div>
+  );
+}
+          <div className=""
+          <button onClick={}>Withdraw</button>
         </div>)
 }

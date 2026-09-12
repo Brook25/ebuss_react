@@ -11,11 +11,14 @@ interface PaymentOption {
 
 
 export default function Checkout (cartId: number, paymentTotal: number) {
+  
+  /* keep an eye on edge cases */
   const user = userAuth();
 
   const [selectedOption, setSelectedOption] = useState<PaymentOption | null>(null);
   const [paymentOptions, setPaymentOptions] = useState<PaymentOption[]>([]);
   const [checkoutStatus, setCheckoutStatus] = useState<boolean>(false);
+  const [paymentSubmitted, setPaymentSubmitted] = useState<boolean>(false);
 
     useEffect(() => {
       let isMounted = true;
@@ -33,7 +36,7 @@ export default function Checkout (cartId: number, paymentTotal: number) {
       return () => {
         isMounted = false;
       }
-    }, []);
+    }, [cartId, paymentTotal]);
 
     // handle idempotency
     const idempotencyKey = useNotifications()?.getIdempotencyKey();
@@ -44,6 +47,9 @@ export default function Checkout (cartId: number, paymentTotal: number) {
         if (!selectedOption) {
           alert("Please select a payment option.");
           throw new Error("No payment option selected.");
+        }
+        if (!idempotencyKey) {
+          throw new Error("Idempotency key is missing.");
         }
         const response = await fetch(`http://localhost:8000/playground/checkout/${selectedOption}/`, {
         method: 'POST',
@@ -58,7 +64,6 @@ export default function Checkout (cartId: number, paymentTotal: number) {
     catch (error) {
       console.error("Error during checkout:", error);
     }
-
     }
 
     return (
@@ -72,7 +77,7 @@ export default function Checkout (cartId: number, paymentTotal: number) {
             <h3>{selectedOption?.name} Details</h3>
             <img src={`/images/${selectedOption?.logo}`} alt={`${selectedOption?.name} logo`} className="selected-option-logo" />
             <p>Payment Total: ${paymentTotal.toFixed(2)}</p>
-            <button className="confirm-payment-button" disabled={!selectedOption || paymentTotal <= 0 || !idempotencyKey || checkoutStatus} onClick={handleCheckout}>
+            <button className="confirm-payment-button" disabled={!selectedOption || paymentTotal <= 0 || !idempotencyKey || paymentSubmitted || checkoutStatus} onClick={() => {handleCheckout(), setPaymentSubmitted(true)}}>
               Confirm Payment
             </button>
           </div>)
