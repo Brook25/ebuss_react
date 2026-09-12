@@ -3,13 +3,19 @@ import { userAuth } from "./AuthContext";
 import { useNotifications } from "./NotificationContext";
 
 
+interface PaymentOption {
+  name: string;
+  logo: string;
+  [key: string]: any;
+}
+
 
 export default function Checkout (cartId: number, paymentTotal: number) {
   const user = userAuth();
 
-  const [selectedOption, setSelectedOption] = useState<Object>({});
-  const [paymentOptions, setPaymentOptions] = useState<[]>([]);
-  const [checkoutStatus, setCheckoutStatus] = useState<boolean | null>(null);
+  const [selectedOption, setSelectedOption] = useState<PaymentOption | null>(null);
+  const [paymentOptions, setPaymentOptions] = useState<PaymentOption[]>([]);
+  const [checkoutStatus, setCheckoutStatus] = useState<boolean>(false);
 
     useEffect(() => {
       let isMounted = true;
@@ -32,8 +38,14 @@ export default function Checkout (cartId: number, paymentTotal: number) {
     // handle idempotency
     const idempotencyKey = useNotifications()?.getIdempotencyKey();
     
-    const handleCheckout = () => {
-      const response = await fetch(`http://localhost:8000/playground/checkout/${selectedOption}/`, {
+    const handleCheckout = async () => {
+
+      try {
+        if (!selectedOption) {
+          alert("Please select a payment option.");
+          throw new Error("No payment option selected.");
+        }
+        const response = await fetch(`http://localhost:8000/playground/checkout/${selectedOption}/`, {
         method: 'POST',
         body: JSON.stringify({
           'cartId': cartId,
@@ -42,6 +54,10 @@ export default function Checkout (cartId: number, paymentTotal: number) {
         })
       });
       response.ok ? setCheckoutStatus(true) : setCheckoutStatus(false);
+    }
+    catch (error) {
+      console.error("Error during checkout:", error);
+    }
 
     }
 
@@ -53,10 +69,10 @@ export default function Checkout (cartId: number, paymentTotal: number) {
           <p>Checkout successful!</p>
         ) : (
           <div className="selected-option-details">
-            <h3>{option.name} Details</h3>
-            <img src=`/images/${option}.png` alt={`${option} logo`} className="selected-option-logo" />
+            <h3>{selectedOption?.name} Details</h3>
+            <img src={`/images/${selectedOption?.logo}`} alt={`${selectedOption?.name} logo`} className="selected-option-logo" />
             <p>Payment Total: ${paymentTotal.toFixed(2)}</p>
-            <button className="confirm-payment-button" onClick={handleCheckout}>
+            <button className="confirm-payment-button" disabled={!selectedOption || paymentTotal <= 0 || !idempotencyKey || checkoutStatus} onClick={handleCheckout}>
               Confirm Payment
             </button>
           </div>)
